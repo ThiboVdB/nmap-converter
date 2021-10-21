@@ -11,6 +11,8 @@ class HostModule():
     def __init__(self, host):
         self.host = next(iter(host.hostnames), "")
         self.ip = host.address
+        self.mac = host.mac
+        self.macvendor = host.vendor
         self.port = ""
         self.protocol = ""
         self.status = ""
@@ -33,6 +35,7 @@ class ServiceModule(HostModule):
         super(ServiceModule, self).__init__(host)
         self.host = next(iter(host.hostnames), "")
         self.ip = host.address
+        self.mac = host.mac      
         self.port = service.port
         self.protocol = service.protocol
         self.status = service.state
@@ -96,9 +99,11 @@ def generate_hosts(workbook, sheet, report):
     sheet.autofilter("A1:E1")
     sheet.freeze_panes(1, 0)
 
-    hosts_header = ["Host", "IP", "Status", "Services", "OS"]
+    hosts_header = ["Host", "IP","MAC", "MAC Vendor" ,"Status", "Services", "OS"]
     hosts_body = {"Host": lambda host: next(iter(host.hostnames), ""),
                   "IP": lambda host: host.address,
+                  "MAC": lambda host: host.mac,
+                  "MAC Vendor": lambda host: host.vendor,
                   "Status": lambda host: host.status,
                   "Services": lambda host: len(host.services),
                   "OS": lambda host: os_class_string(host.os_class_probabilities())}
@@ -119,8 +124,9 @@ def generate_results(workbook, sheet, report):
     sheet.autofilter("A1:N1")
     sheet.freeze_panes(1, 0)
 
-    results_header = ["Host", "IP", "Port", "Protocol", "Status", "Service", "Tunnel", "Source", "Method", "Confidence", "Reason", "Product", "Version", "Extra", "Flagged", "Notes"]
+    results_header = ["Host", "MAC", "IP", "Port", "Protocol", "Status", "Service", "Tunnel", "Source", "Method", "Confidence", "Reason", "Product", "Version", "Extra", "Flagged", "Notes"]
     results_body = {"Host": lambda module: module.host,
+    		    "MAC": lambda host: host.mac,
                     "IP": lambda module: module.ip,
                     "Port": lambda module: module.port,
                     "Protocol": lambda module: module.protocol,
