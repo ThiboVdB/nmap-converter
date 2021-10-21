@@ -2,12 +2,12 @@
 Python script for converting nmap reports into XLS
 # Requirements
 ```bash 
-sudo pip install python-libnmap
-sudo pip install XlsxWriter
+sudo pip3 install python-libnmap
+sudo pip3 install XlsxWriter
 ```
 or 
 ```bash 
-sudo pip install -r requirements.txt
+sudo pip3 install -r requirements.txt
 ```
 # Usage
 ```bash
